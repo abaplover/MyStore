@@ -12,6 +12,7 @@ import { NavComponent } from './components/nav/nav.component';
 import { ReversePipe } from './pipes/reverse.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { VocalToNumberPipe } from './pipes/vocal-to-number.pipe';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,9 @@ import { VocalToNumberPipe } from './pipes/vocal-to-number.pipe';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SwiperModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
