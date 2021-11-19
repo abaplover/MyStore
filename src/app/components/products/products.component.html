@@ -1,4 +1,5 @@
-<button (click)="toggleProductDetail()">click</button>
+<button (click)="createNewProduct()">Crear Producto</button>
+<button (click)="onShowDetail('123312')">Detalle not foound</button>
 <div class="products--grid">
   <app-product
     [product]="product"
@@ -7,8 +8,10 @@
     (showProduct)="onShowDetail($event)"
   ></app-product>
 </div>
+<button (click)="loadMore()"> Carga mas</button>
 
 <div class="product-detail" [class.active]="showProductDetail">
+  {{ statusDetail}}
   <div *ngIf="productChosen">
       <button (click)="toggleProductDetail()">Close</button>
       <h1> {{ productChosen.title }}</h1>
@@ -20,5 +23,7 @@
       </ng-template>
     </swiper>
       <p> {{ productChosen.description }}</p>
+      <button (click)="updateProduct()">Editar Producto</button>
+      <button (click)="deleteProduct()">Eliminar Producto</button>
   </div>
   </div>
