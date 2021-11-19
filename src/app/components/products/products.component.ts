@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Product } from '../../models/product.model';
 
+import { switchMap } from 'rxjs/operators';
+import { zip } from 'rxjs';
+
 import { CreateProductDTO } from '../../models/product.model';
 
 import { StoreService } from '../../services/store.service';
@@ -100,6 +103,24 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
       this.productChosen = data;
     })
     
+  }
+
+  readAndUpdate(id: string){
+    this.productService.getProduct(id)
+    .pipe(
+      switchMap((product) =>  this.productService.update(product.id, {title: 'change'})
+      )
+    )
+    .subscribe( data => {
+      console.log(data);  
+    });
+
+    this.productService.fetchReadAndUpdate(id, {title: 'change'})
+    .subscribe(response => {
+      const read = response[0];
+      const update = response[1];
+    })
+
   }
 
   deleteProduct(){

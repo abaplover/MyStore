@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode} from '@angular/common/http'
 import { CreateProductDTO, Product } from '../models/product.model';
 import { UpdateProductDTO } from '../models/product.model';
-import { catchError, retry} from 'rxjs/operators'
-import { throwError} from 'rxjs'
+import { catchError, retry, map} from 'rxjs/operators'
+import { throwError, zip} from 'rxjs'
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,10 +27,24 @@ export class ProductsService {
 
     return this.httpClient.get<Product[]>(this.apiUrl, { params })
     .pipe(
-      retry(3)
+      retry(3),
+      map( products => products.map(item => {
+        return {
+          ...item,
+          taxes: .19 * item.price
+        }
+      }))
     );
 
   }
+
+  fetchReadAndUpdate(id: string, dto:UpdateProductDTO){
+    return zip(
+      this.getProduct(id),
+      this.update(id, {title: 'nuevo'})
+    );
+  }
+
   getProduct(id:string){
     return this.httpClient.get<Product>(`${this.apiUrl}/${id}`)
     .pipe(
