@@ -10,4 +10,14 @@ export class TokenService {
   private apiUrl = `${environment.API_URL}/api/auth`;
 
   constructor( private http: HttpClient) { }
+
+
+  saveToken(token: string){
+    localStorage.setItem('token', token);
+  }
+
+  getToken(){
+    const token = localStorage.getItem('token');
+    return token;
+  }
 }

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
 
 import { UsersService } from './services/users.service';
-
+import { FilesService } from './services/files.service';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
-    private userService: UsersService
+    private userService: UsersService,
+    private fileService: FilesService
   ){
 
   }
@@ -25,6 +26,7 @@ export class AppComponent {
   showImg = true;
   token = '';
   userMail = '';
+  imgRta = '';
 
   onLoaded(img: string) {
     console.log('log padre', img);
@@ -43,6 +45,24 @@ export class AppComponent {
     .subscribe(rta => {
       console.log(rta);
     })
+  }
+
+  downloadPdf(){
+    this.fileService.getFile('my-pdf', '', '')
+    .subscribe();
+  }
+
+  onUpload(event: Event){
+
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.item(0);
+    if (file) {
+      this.fileService.uploadFile(file)
+    .subscribe(rta => {
+      this.imgRta = rta.location;
+    });
+    }
+    
   }
 
 

@@ -40,7 +40,7 @@ export class NavComponent implements OnInit {
     ).pipe(
       switchMap((token) => {
         this.token = token.access_token
-        return this.authService.profile(token.access_token);
+        return this.authService.profile();
       })
     )
     .subscribe(rta => {
@@ -49,12 +49,12 @@ export class NavComponent implements OnInit {
 
   }
 
-  getProfile(){
-    this.authService.profile(this.token)
-    .subscribe(profile => {
-      this.userMail = profile.email;
-      console.log(profile)
-    });
-  }
+  // getProfile(){
+  //   this.authService.profile(this.token)
+  //   .subscribe(profile => {
+  //     this.userMail = profile.email;
+  //     console.log(profile)
+  //   });
+  // }
 
 }
