@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
 import { AuthService } from 'src/app/services/auth.service';
-
-import { UsersService } from 'src/app/services/users.service';
-
+import { CategoriesService } from 'src/app/services/categories.service';
+import { StoreService } from 'src/app/services/store.service';
 import { Input } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
+import { Category } from 'src/app/models/category.model';
 
 @Component({
   selector: 'app-nav',
@@ -17,15 +16,25 @@ export class NavComponent implements OnInit {
 
   activeMenu = false;
   token = '';
+  counter = 0;
+
+  categories: Category[] = [];
 
   constructor(
     private authService: AuthService,
-    private userService: UsersService
+    private storeService: StoreService,
+    private categoriesService: CategoriesService
   ) { }
 
 
 
   ngOnInit(): void {
+    this.storeService.myCart$.subscribe(
+      products => {
+        this.counter = products.length;
+      }
+    )
+    this.getAllCategories();
   }
 
   toggleMenu() {
@@ -47,6 +56,13 @@ export class NavComponent implements OnInit {
       this.userMail = rta.email;
     });
 
+  }
+
+  getAllCategories(){
+    this.categoriesService.getAllCategories()
+    .subscribe(data => {
+      this.categories = data;
+    });
   }
 
   // getProfile(){

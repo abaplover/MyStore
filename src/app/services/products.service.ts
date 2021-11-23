@@ -13,11 +13,21 @@ import { checkTime, TimeInterceptor } from '../interceptors/time.interceptor';
 })
 export class ProductsService {
 
-  private apiUrl = `${environment.API_URL}/api/products`;
+  private apiUrl = `${environment.API_URL}/api`;
 
   constructor(
     private httpClient:HttpClient
   ) { }
+
+  getByCategory(categoryId: string, limit?: number, offset?: number){
+    let params = new HttpParams();
+    if (limit && offset) {
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+      
+    }
+    return this.httpClient.get<Product[]>(`${this.apiUrl}/categories/${categoryId}/products`, {params} )
+  }
 
   getAllPRoducts(limit?: number, offset?: number){
     let params = new HttpParams();
@@ -27,7 +37,7 @@ export class ProductsService {
       
     }
 
-    return this.httpClient.get<Product[]>(this.apiUrl, { params, context: checkTime() })
+    return this.httpClient.get<Product[]>(`${this.apiUrl}/products`, { params, context: checkTime() })
     .pipe(
       retry(3),
       map( products => products.map(item => {
@@ -48,7 +58,7 @@ export class ProductsService {
   }
 
   getProduct(id:string){
-    return this.httpClient.get<Product>(`${this.apiUrl}/${id}`)
+    return this.httpClient.get<Product>(`${this.apiUrl}/products/${id}`)
     .pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.Conflict) {
@@ -63,21 +73,21 @@ export class ProductsService {
   }
 
   getProductByPage(limit: number, offset: number){
-    return this.httpClient.get<Product[]>(`${this.apiUrl}`, {
+    return this.httpClient.get<Product[]>(`${this.apiUrl}/products`, {
       params: {limit, offset}
     });
   }
 
   create(dto: CreateProductDTO){
-    return this.httpClient.post<Product>(this.apiUrl, dto );
+    return this.httpClient.post<Product>(`${this.apiUrl}/products`, dto );
   }
   update(id:string, dto:UpdateProductDTO){
 
-    return this.httpClient.put<Product>(`${this.apiUrl}/${id}`, dto);
+    return this.httpClient.put<Product>(`${this.apiUrl}/products/${id}`, dto);
 
   }
 
   delete(id:string){
-    return this.httpClient.delete<boolean>(`${this.apiUrl}/${id}`);
+    return this.httpClient.delete<boolean>(`${this.apiUrl}/products/${id}`);
   }
 }

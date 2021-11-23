@@ -1,8 +1,12 @@
 <div class="products--grid">
-    <app-img *ngIf="product.images.length > 0" [img]="product.images[0]"></app-img>
+    <a [routerLink]="['/product', product.id]">
+        <app-img *ngIf="product.images.length > 0" [img]="product.images[0]"></app-img>
+    </a>
+
     <h2>{{ product.price | currency:'USD'}}</h2>
     <h2>{{ product?.taxes | currency:'USD'}}</h2>
-    <p>{{ product.title | vocalToNumber }}</p>
-    <button (click)="onShowDetail()">Ver detalle</button>
+    <p>{{ product.title }}</p>
+    <!-- <button (click)="onShowDetail()">Ver detalle</button> -->
+    <a routerLink="." [queryParams]="{product: product.id}">Ver detalle</a>
     <button (click)="onAddToCart()">Add cart</button>
 </div>

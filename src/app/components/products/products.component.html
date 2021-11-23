@@ -1,5 +1,5 @@
-<button (click)="createNewProduct()">Crear Producto</button>
-<button (click)="onShowDetail('123312')">Detalle not foound</button>
+<!--button (click)="createNewProduct()">Crear Producto</button>
+<button (click)="onShowDetail('123312')">Detalle not foound</button-->
 <div class="products--grid">
   <app-product
     [product]="product"
@@ -8,7 +8,7 @@
     (showProduct)="onShowDetail($event)"
   ></app-product>
 </div>
-<button (click)="loadMore()"> Carga mas</button>
+<button (click)="onLoadMore()"> Cargar mas</button>
 
 <div class="product-detail" [class.active]="showProductDetail">
   {{ statusDetail}}

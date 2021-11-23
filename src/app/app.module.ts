@@ -24,6 +24,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { HighlightDirective } from './directives/highlight.directive';
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { HighlightDirective } from './directives/highlight.directive';
     RegisterComponent,
     RecoveryComponent,
     ProfileComponent,
-    HighlightDirective
+    HighlightDirective,
+    ProductDetailComponent
 
   ],
   imports: [

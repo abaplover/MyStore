@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 
 import { Product } from '../../models/product.model';
 
@@ -9,17 +9,25 @@ import { CreateProductDTO } from '../../models/product.model';
 
 import { StoreService } from '../../services/store.service';
 import { ProductsService } from 'src/app/services/products.service';
+//import { EventEmitter } from 'stream';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
 
   myShoppingCart: Product[] = [];
   total = 0;
-  products: Product[] = [];
+  @Input() products: Product[] = [];
+  @Input() set productId(id: string | null){
+    if(id){
+      this.onShowDetail(id);
+    }
+  } 
+  @Output() loadMore = new EventEmitter();
   showProductDetail = false;
 
   productChosen: Product = {
@@ -33,9 +41,9 @@ export class ProductsComponent implements OnInit {
       name: ''
   }
 };
-limit = 10;
-offset = 1;
+
 statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
+  
   today = new Date();
   date = new Date(2021,1,21);
 
@@ -44,11 +52,6 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
     private productService: ProductsService
   ) {
     this.myShoppingCart = this.storeService.getShoppingCart();
-  }
-
-  ngOnInit(): void {
-    this.loadMore();
-    
   }
 
   onAddToShoppingCart(product: Product) {
@@ -62,10 +65,13 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
   onShowDetail(id: string){
     this.statusDetail = 'loading';
     this.toggleProductDetail();
-    this.productService.getProduct(id)
+    if (!this.showProductDetail) {
+      this.showProductDetail = true;
+    }
     
+    this.productService.getProduct(id)
     .subscribe(data => {
-      this.toggleProductDetail();
+      
       this.productChosen = data;
       this.statusDetail = 'success';
     }, response => {
@@ -132,13 +138,9 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
       this.showProductDetail = false;
     });
   }
+  onLoadMore(){
 
-  loadMore(){
-    this.productService.getAllPRoducts(this.limit, this.offset)
-    .subscribe(data => {
-      this.products =  this.products.concat(data);
-      this.offset += this.limit;
-    })
+    this.loadMore.emit();
   }
 
 }
