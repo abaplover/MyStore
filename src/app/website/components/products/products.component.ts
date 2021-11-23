@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 
-import { Product } from '../../models/product.model';
+import { Product } from '../../../models/product.model';
 
 import { switchMap } from 'rxjs/operators';
 import { zip } from 'rxjs';
 
-import { CreateProductDTO } from '../../models/product.model';
+import { CreateProductDTO } from '../../../models/product.model';
 
-import { StoreService } from '../../services/store.service';
+import { StoreService } from '../../../services/store.service';
 import { ProductsService } from 'src/app/services/products.service';
 //import { EventEmitter } from 'stream';
 import { EventEmitter } from '@angular/core';
@@ -26,7 +26,7 @@ export class ProductsComponent {
     if(id){
       this.onShowDetail(id);
     }
-  } 
+  }
   @Output() loadMore = new EventEmitter();
   showProductDetail = false;
 
@@ -43,7 +43,7 @@ export class ProductsComponent {
 };
 
 statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
-  
+
   today = new Date();
   date = new Date(2021,1,21);
 
@@ -61,29 +61,29 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
 
   toggleProductDetail(){
     this.showProductDetail = !this.showProductDetail;
-  } 
+  }
   onShowDetail(id: string){
     this.statusDetail = 'loading';
     this.toggleProductDetail();
     if (!this.showProductDetail) {
       this.showProductDetail = true;
     }
-    
+
     this.productService.getProduct(id)
     .subscribe(data => {
-      
+
       this.productChosen = data;
       this.statusDetail = 'success';
     }, response => {
       window.alert(response);
       this.statusDetail = 'error';
-      
+
     })
   }
 
   createNewProduct(){
     const product : CreateProductDTO = {
-      
+
       title: 'Nuevo producto',
       description: ' Nuevo producto para probar post en API',
       images: [`https://placeimg.com/640/480/any?random=${Math.random()}`],
@@ -108,7 +108,7 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
       this.products[productIndex] = data;
       this.productChosen = data;
     })
-    
+
   }
 
   readAndUpdate(id: string){
@@ -118,7 +118,7 @@ statusDetail : 'loading' | 'success'  | 'error' | 'init' = 'init';
       )
     )
     .subscribe( data => {
-      console.log(data);  
+      console.log(data);
     });
 
     this.productService.fetchReadAndUpdate(id, {title: 'change'})
