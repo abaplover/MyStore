@@ -1,30 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 
 import { AuthService } from './services/auth.service';
 
 import { UsersService } from './services/users.service';
 import { FilesService } from './services/files.service';
-
+import { TokenService } from './services/token.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
     private userService: UsersService,
-    private fileService: FilesService
+    private fileService: FilesService,
+    private tokenService: TokenService
   ){
 
   }
 
+  ngOnInit(){
+    const token = this.tokenService.getToken();
+    if (token) {
+      this.authService.profile()
+      .subscribe()
+    }
+  }
+
   imgParent = '';
   showImg = true;
-  token = '';
+
   userMail = '';
   imgRta = '';
 
@@ -36,16 +45,7 @@ export class AppComponent {
     this.showImg = !this.showImg;
   }
 
-  createUser(){
-    this.userService.create({
-      name: 'Roland',
-      email: 'roland@mail.com',
-      password: '12345'
-    })
-    .subscribe(rta => {
-      console.log(rta);
-    })
-  }
+
 
   downloadPdf(){
     this.fileService.getFile('my-pdf', '', '')
@@ -62,7 +62,7 @@ export class AppComponent {
       this.imgRta = rta.location;
     });
     }
-    
+
   }
 
 

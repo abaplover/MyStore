@@ -5,6 +5,11 @@ import { StoreService } from 'src/app/services/store.service';
 import { Input } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
 import { Category } from 'src/app/models/category.model';
+import { UsersService } from 'src/app/services/users.service';
+
+import { Router } from '@angular/router'
+import { User } from 'src/app/models/user.model';
+
 
 @Component({
   selector: 'app-nav',
@@ -12,7 +17,9 @@ import { Category } from 'src/app/models/category.model';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  @Input() userMail: string = '';
+  userMail: string | undefined = '';
+
+  profile: User | null = null;
 
   activeMenu = false;
   token = '';
@@ -23,9 +30,10 @@ export class NavComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private storeService: StoreService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private userService: UsersService,
+    private router: Router
   ) { }
-
 
 
   ngOnInit(): void {
@@ -35,6 +43,11 @@ export class NavComponent implements OnInit {
       }
     )
     this.getAllCategories();
+
+    this.authService.user$
+    .subscribe(data => {
+      this.profile = data;
+    })
   }
 
   toggleMenu() {
@@ -42,18 +55,14 @@ export class NavComponent implements OnInit {
   }
 
   login(){
+    //this.createUser();
 
-    this.authService.login(
-     'roland@mail.com',
-     '12345'
-    ).pipe(
-      switchMap((token) => {
-        this.token = token.access_token
-        return this.authService.profile();
-      })
-    )
+    this.authService.loginAndGet(
+     'admin@mail.com',
+     'admin123'
+   )
     .subscribe(rta => {
-      this.userMail = rta.email;
+      this.router.navigate(['/profile']);
     });
 
   }
@@ -65,12 +74,22 @@ export class NavComponent implements OnInit {
     });
   }
 
-  // getProfile(){
-  //   this.authService.profile(this.token)
-  //   .subscribe(profile => {
-  //     this.userMail = profile.email;
-  //     console.log(profile)
-  //   });
-  // }
+  createUser(){
+    this.userService.create({
+      name: 'Roland',
+      email: 'roland@mail.com',
+      password: '12345',
+      role: 'admin'
+    })
+    .subscribe(rta => {
+      console.log(rta);
+    })
+  }
+
+  logout(){
+    this.authService.logout();
+    this.profile = null;
+    this.router.navigate(['/home']);
+  }
 
 }

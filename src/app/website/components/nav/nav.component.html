@@ -32,11 +32,13 @@
       </ul>
     </nav>
     <div class="info">
-      <button *ngIf="!token; else elseBlock" (click)="login()">Login</button>
+      <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button>
       <div class="account">
 
         <ng-template #elseBlock>
-          {{userMail}}
+
+          <a routerLink="/profile"> {{profile?.email}}</a>
+          <button (click)="logout()">Log out</button>
         </ng-template>
 
       </div>

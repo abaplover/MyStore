@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/models/product.model';
-import { retry, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',

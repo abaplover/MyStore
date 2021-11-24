@@ -8,7 +8,8 @@ import { AppComponent } from './app.component';
 
 import { TimeInterceptor } from './interceptors/time.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { QuicklinkModule } from 'ngx-quicklink';
+
 // import { SwiperModule } from 'swiper/angular';
 
 // import { ImgComponent } from './website/components/img/img.component';
@@ -57,6 +58,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    QuicklinkModule
     // SwiperModule
 
 
